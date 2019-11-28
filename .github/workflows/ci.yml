@@ -68,7 +68,7 @@ jobs:
           conan download $CONAN_REFERENCE -r upload
           conan copy $CONAN_REFERENCE $CONAN_USERNAME/stable --all
           conan user -r upload $CONAN_LOGIN_USERNAME -p "$CONAN_PASSWORD"
-          conan upload -r upload --all --confirm libsass/*@$CONAN_USERNAME/stable
+          conan upload -r upload --all --confirm sassc/*@$CONAN_USERNAME/stable
         env:
           CONAN_REFERENCE: sassc/${{ matrix.version }}@${{ env.CONAN_USERNAME }}/testing
           CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
