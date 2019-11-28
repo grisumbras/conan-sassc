@@ -1,3 +1,4 @@
+import os
 import contextlib
 from conans import (
     AutoToolsBuildEnvironment,
@@ -6,17 +7,18 @@ from conans import (
 )
 
 
-class LibSassConan(ConanFile):
+class SasscConan(ConanFile):
     name = "sassc"
-    description = "A C/C++ implementation of a Sass compiler"
+    description = "libsass command line driver"
     author = "Dmitry Arkhipov <grisumbras@gmail.com>"
     license = "MIT"
     homepage = "https://sass-lang.com/libsass"
-    url = "https://github.com/grisumbras/conan-libsass"
+    url = "https://github.com/grisumbras/conan-sassc"
     default_user = "grisumbras"
     default_channel = "testing"
 
     settings = "arch_build", "os_build", "compiler"
+    exports = "LICENSE", "*.patch"
 
     def requirements(self):
         self.requires("libsass/{version}@{user}/{channel}".format(
@@ -31,18 +33,23 @@ class LibSassConan(ConanFile):
             ext=self._os_ext,
         )
         tools.get(url)
+        tools.patch(
+            base_path=self._src_subdir, patch_file="make.patch", strip=1
+        )
 
     def build(self):
         with self._build_context():
             autotools = AutoToolsBuildEnvironment(self)
-            autotools.make()
+            vars = self._fixed_vars(autotools)
+            print(vars)
+            autotools.make(vars=vars)
 
     def package(self):
         with self._build_context():
-            with tools.environment_append({"PREFIX": self.package_folder}):
-                autotools = AutoToolsBuildEnvironment(self)
-                autotools.install()
-        self.copy("LICENSE", src=self._src_subdir,  dst="share/libsass")
+            autotools = AutoToolsBuildEnvironment(self)
+            vars = self._fixed_vars(autotools)
+            autotools.install(vars=vars)
+        self.copy("LICENSE", src=self._src_subdir, dst="share/sassc")
 
     def package_id(self):
         del self.settings.compiler
@@ -55,9 +62,23 @@ class LibSassConan(ConanFile):
     def _src_subdir(self):
         return "sassc-{}".format(self.version)
 
+    def _fixed_vars(self, autotools):
+        vars = autotools.vars
+        for var in ["CXXFLAGS", "CFLAGS"]:
+            vars[var] += " " + vars["CPPFLAGS"]
+        return vars
+
     @contextlib.contextmanager
     def _build_context(self):
-        env = {"SASS_LIBSASS_PATH": self.deps_cpp_info["libsass"].rootpath}
+        if self.options["libsass"].shared:
+            libsass_build_type = "shared"
+        else:
+            libsass_build_type = "static"
+        env = {
+            "PREFIX": self.package_folder,
+            "SASS_LIBSASS_PATH": self.deps_cpp_info["libsass"].rootpath,
+            "BUILD": libsass_build_type
+        }
         with tools.environment_append(env):
             with tools.chdir(self._src_subdir):
                 yield

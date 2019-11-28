@@ -1,0 +1,35 @@
+--- old/Makefile	2019-05-21 10:57:12.000000000 +0300
++++ new/Makefile	2019-11-28 13:04:52.936891917 +0300
+@@ -187,18 +187,18 @@
+ build: build-$(BUILD)
+ libsass: libsass-$(BUILD)
+
+-$(SASSC_EXE): libsass build
++$(SASSC_EXE): build
+
+ $(DESTDIR)$(PREFIX)/:
+ 	$(MKDIR) $(DESTDIR)$(PREFIX)
+
+ $(DESTDIR)$(PREFIX)/bin/:
+-	$(MKDIR) $(DESTDIR)$(PREFIX)/bin
++	$(MKDIR) $(D)$(PREFIX)/bin
+
+ $(DESTDIR)$(PREFIX)/bin/%: bin/%
+ 	$(INSTALL) -D -v -m0755 "$<" "$@"
+
+-install: libsass-install-$(BUILD) \
++install: \
+ 	$(DESTDIR)$(PREFIX)/$(SASSC_EXE)
+
+ build-static: $(RESOURCES) $(OBJECTS) $(LIB_STATIC)
+@@ -213,8 +213,8 @@
+
+ build-static-dev: build-static
+
+-$(LIB_STATIC): libsass-static
+-$(LIB_SHARED): libsass-shared
++$(LIB_STATIC):
++$(LIB_SHARED):
+
+ libsass-static:
+ ifdef SASS_LIBSASS_PATH
