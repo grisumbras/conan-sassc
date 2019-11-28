@@ -1,0 +1,6 @@
+project sassc-test ;
+
+css styles : styles.scss ;
+
+alias test ;
+explicit test ;
