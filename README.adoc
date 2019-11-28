@@ -1,0 +1,49 @@
+= conan-sassc _(sassc)_
+:version: 3.6.1
+
+image:https://api.bintray.com/packages/grisumbras/conan/sassc%3Agrisumbras/images/download.svg?version={version}%3Astable[Download,link=https://bintray.com/grisumbras/conan/sassc%3Agrisumbras/{version}%3Astable/link]
+image:https://github.com/grisumbras/conan-sassc/workflows/Build/badge.svg?branch=master[Build status,link=https://github.com/grisumbras/conan-sassc/actions]
+
+____
+https://conan.io[Conan] package for https://sass-lang.com/libsass[sassc]
+command-line tool
+____
+
+== Install
+
+Add the necessary conan remote:
+
+[source,shell]
+----
+$ conan remote add grisumbras https://api.bintray.com/conan/grisumbras/conan
+----
+
+Add the package to the list of (build) requirements inside your `conanfile.txt`:
+
+[source,ini,subs="attributes+"]
+----
+[build_requires]
+sassc/{version}@grisumbras/stable
+----
+
+or inside your `conanfile.py`:
+
+[source,py,subs="attributes+"]
+----
+class YourConan(ConanFile):
+    build_requires = "sassc/{version}@grisumbras/stable"
+----
+
+== Maintainer
+Dmitry Arkhipov <grisumbras@gmail.com>
+
+Sassc itself is maintained by other people https://github.com/sass/sassc[here].
+
+== Contributing
+Patches welcome!
+
+== License
+link:LICENSE[BSL-1.0] (C) 2019 Dmitry Arkhipov
+
+Sassc itself is licensed under
+https://github.com/sass/sassc/blob/master/LICENSE[a different license].
