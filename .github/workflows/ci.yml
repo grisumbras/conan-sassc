@@ -55,8 +55,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    if: github.event.ref == 'refs/heads/master' || startsWith(github.event.ref, 'refs/tags/')
-
     steps:
       - name: Configure Python
         uses: actions/setup-python@v1
