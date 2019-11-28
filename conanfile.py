@@ -54,6 +54,9 @@ class SasscConan(ConanFile):
     def package_id(self):
         del self.settings.compiler
 
+    def package_info(self):
+        self.env_info.path = [os.path.join(self.package_folder, "bin")]
+
     @property
     def _os_ext(self):
         return "zip" if self.settings.os_build == "Windows" else "tar.gz"
