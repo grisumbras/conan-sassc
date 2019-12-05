@@ -40,22 +40,19 @@ class SasscConan(ConanFile):
     def build(self):
         with self._build_context():
             autotools = AutoToolsBuildEnvironment(self)
-            vars = self._fixed_vars(autotools)
-            print(vars)
-            autotools.make(vars=vars)
+            autotools.make(vars=self._fixed_vars(autotools))
 
     def package(self):
         with self._build_context():
             autotools = AutoToolsBuildEnvironment(self)
-            vars = self._fixed_vars(autotools)
-            autotools.install(vars=vars)
+            autotools.install(vars=self._fixed_vars(autotools))
         self.copy("LICENSE", src=self._src_subdir, dst="share/sassc")
 
     def package_id(self):
         del self.settings.compiler
 
     def package_info(self):
-        self.env_info.path = [os.path.join(self.package_folder, "bin")]
+        self.env_info.PATH = [os.path.join(self.package_folder, "bin")]
 
     @property
     def _os_ext(self):
