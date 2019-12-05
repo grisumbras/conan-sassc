@@ -21,7 +21,7 @@ class SasscConan(ConanFile):
     exports = "LICENSE", "*.patch"
 
     def requirements(self):
-        self.requires("libsass/{version}@{user}/{channel}".format(
+        self.requires("libsass/[^{version}]@{user}/{channel}".format(
             version=self.version,
             user=self.user,
             channel=self.channel,
